@@ -196,4 +196,4 @@ While this is the fourth year that Babel is being used in this course, and the c
 
 ### Cluster
 
-The technical specification of the cluster as well as the documentation on how to use it (including changing your group password and making reservations) is online at: \href{https://cluster.di.fct.unl.pt}{\url{https://cluster.di.fct.unl.pt}}. You should read the documentation carefully. Once you have received your credentials you should be able to use it freely.
+The technical specification of the cluster as well as the documentation on how to use it (including changing your group password and making reservations) is online at: <https://cluster.di.fct.unl.pt>. You should read the documentation carefully. Once you have received your credentials you should be able to use it freely.
