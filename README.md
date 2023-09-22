@@ -37,11 +37,15 @@ Use the following link to generate this project repository for your group
 
 ### Implementation
 
-The base source code for your project should be developed in the `src/asd-project1-base` folder provided in the base [source code](./src/asd-project1-base/) folder.
+Th eproject focus on the study and implementation of reliable broadcast. To this end, the goals/steps of this first project are defined as follows:
 
 1. Develop a distributed system (in Java, using [Babel](https://github.com/pfouto/babel-core), source code [provided](./src)) that implements a *reliable* broadcast algorithm (Lecture 1 and Lecture 2) using a gossip/epidemic protocol (Lecture 2) for deciding which peers to communicate with.
 2. Add the *"anti-entropy"* optimisation (Lecture 2), to reduce the number of redundant messages that are sent throughout the system.
 3. Implement the *[HyParView](https://asc.di.fct.unl.pt/~jleitao/pdf/dsn07-leitao.pdf)* protocol for allowing your reliable broadcast algorithm to request peers to communicate with more efficiently.
+
+The base source code for your project should be developed in the `src/asd-project1-base` folder provided in the base [source code](./src/asd-project1-base/) folder.
+
+
 
 ### Report
 
@@ -107,7 +111,8 @@ ______________________________________________________
 
 #### Anti-entropy optimisation
 
-Your anti-entropy module should communicate with the network before any message is broadcast, to locate a gossip neighbour which has not already received the broadcast message. This *should* reduce the number of messages in the system, without contradicting the guarantees of the reliable broadcast.
+Your anti-entropy module should communicate with the network before any message is send to other node, to know which message the remote peer is missing.
+This *should* reduce the number of messages in the system, without contradicting the guarantees of the reliable broadcast.
 
 ```
 ______________________________________________________
@@ -122,9 +127,9 @@ ______________________________________________________
           |                               |
           v                               |
 ______________________________________________________        
-|                  Reliable Broadcast                 |
+|      Reliable Broadcast with Anti-entropy           |
 |                                                     |
-|     // Send message to peer (based on anti-entropy) |----->
+|    // Send messages to peer (based on anti-entropy) |----->
 |                                                     |
 |                      // Receive messages from peers |<-----
 |_____________________________________________________|
@@ -134,11 +139,11 @@ ______________________________________________________
          |                                |
          v                                |
 ______________________________________________________
-|                 Anti-entropy algorithm              |
+|                 Membership algorithm                |
 |                                                     |
 |                // Communicate with network to learn |---->
-|                // a neighbour process that has not  |
-|                // received the message m yet        |<----
+|                // a neighbour process               |
+|                                                     |<----
 |_____________________________________________________|
 ```
 
@@ -159,7 +164,7 @@ ______________________________________________________
           |                               |
           v                               |
 ______________________________________________________
-|                  Reliable Broadcast                 |
+|     Reliable Broadcast with Anti-Entropy            |
 |                                                     |
 |    // Send messages to peers learned from HyParView |----->
 |                                                     |
@@ -192,7 +197,7 @@ While this is the fourth year that Babel is being used in this course, and the c
 
 ### HyParView
 
-[HyParView](https://asc.di.fct.unl.pt/~jleitao/pdf/dsn07-leitao.pdf), developed in 2007, is a fault-tolerant overlay network. HyParView is based on two distinct partial views of the system that are maintained for different purposes and using different mechanisms. A small partial-view (active view) that is used to ensure communication and cooperation between nodes, that is managed using a reactive strategy, where the contents of these views are only changed in reaction to an external event, such as a node failing or joining the system (or indirect consequences of these events), these views rely on TCP as an unreliable fault detector. A second and larger view (passive view) is used for fault-tolerance, as a source of quick replacements on the active view when this view is not complete. The fact that HyParView maintains a highly stable active view (and hence the overlay denoted by these views is also stable) offers some possibility to improve the communication pattern of nodes disseminating information.
+[HyParView](https://asc.di.fct.unl.pt/~jleitao/pdf/dsn07-leitao.pdf), developed in 2007, is a fault-tolerant overlay network. HyParView is based on two distinct partial views of the system that are maintained for different purposes and using different mechanisms. A small partial-view (active view) that is used to ensure communication and cooperation between nodes, that is managed using a reactive strategy, where the contents of these views are only changed in reaction to an external event, such as a node failing or joining the system (or indirect consequences of these events). These views rely on TCP as an unreliable fault detector. A second and larger view (passive view) is used for fault-tolerance, as a source of quick replacements on the active view when this view is not complete. The fact that HyParView maintains a highly stable active view (and hence the overlay denoted by these views is also stable) offers some possibility to improve the communication pattern of nodes disseminating information.
 
 ### Cluster
 
