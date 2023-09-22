@@ -37,7 +37,7 @@ Use the following link to generate this project repository for your group
 
 ### Implementation
 
-Th eproject focus on the study and implementation of reliable broadcast. To this end, the goals/steps of this first project are defined as follows:
+The project focuses on the study and implementation of reliable broadcast. To this end, the goals/steps of this first phase of the project are defined as follows:
 
 1. Develop a distributed system (in Java, using [Babel](https://github.com/pfouto/babel-core), source code [provided](./src)) that implements a *reliable* broadcast algorithm (Lecture 1 and Lecture 2) using a gossip/epidemic protocol (Lecture 2) for deciding which peers to communicate with.
 2. Add the *"anti-entropy"* optimisation (Lecture 2), to reduce the number of redundant messages that are sent throughout the system.
@@ -149,7 +149,7 @@ ______________________________________________________
 
 #### HyParView optimisation
 
-We discuss how HyParView works to provide a more optimal overlay network for propagating messages, [see below](#hyparview) for more details.
+We discuss [below](#hyparview) how HyParView works to provide a more optimal overlay network for propagating messages. The advantage of using HyParView is that the membership algorithm selects peers to ensure a more efficient propagation of messages.
 
 ```
 ______________________________________________________
