@@ -13,6 +13,8 @@
 
 ### Implementation
 
+The base source code for your project should be developed in the `src/asd-project1-base` folder provided [here](in the base [source code](./src/asd-project1-base/) folder.).
+
 1. Develop a distributed system (in Java, using [Babel](https://github.com/pfouto/babel-core), source code [provided](./src)) that implements a *reliable* broadcast algorithm (Lecture 1 and Lecture 2) using a gossip/epidemic protocol (Lecture 2) for deciding which peers to communicate with.
 2. Add the *"anti-entropy"* optimisation (Lecture 2), to reduce the number of redundant messages that are sent throughout the system.
 3. Implement the *[HyParView](https://asc.di.fct.unl.pt/~jleitao/pdf/dsn07-leitao.pdf)* protocol for allowing your reliable broadcast algorithm to request peers to communicate with more efficiently.
@@ -30,6 +32,7 @@ Write a report, using the [latex template](./latex) provided, that details the f
 
 - Your distributed system must contain 100+ processes
 - A static membership of nodes that are already known can be assumed.
+- The report must have a maximum of 6 pages, excluding bibliography and well-marked appendices.
 
 ## Submission details
 
@@ -143,7 +146,7 @@ The students will develop their project using the Java language (version 11 mini
 
 The framework uses to the [Netty framework](https://netty.io) to support inter-process communication through sockets (although it was designed to hide this from the programmer). The framework will be discussed in the labs. An example application will be provided that is responsible for generating and logging messages in the system.
 
-The javadoc of the framework can be found here: <https://asc.di.fct.unl.pt/~jleitao/babel/>. A more detailed description can be found in the slides provided in the [additional docs](./docs/babel-slides.pdf)
+The javadoc of the framework can be found here: <https://asc.di.fct.unl.pt/~jleitao/babel/>. A more detailed description can be found in the slides provided in the [additional docs](./docs/babel-slides.pdf). Example code for running a broadcast algorithm is provided in the base [source code](./src/asd-project1-base/) folder.
 
 The framework was specifically designed thinking about two complementary goals: $i)$ quick design and implementation of efficient distributed protocols; and $ii)$ teaching distributed algorithms in advanced courses. A significant effort was made to make it such that the code maps closely to protocols descriptions using (modern) pseudo-code. The goal is that you can focus on the key aspects of the protocols, their operation, and their correctness, and that you can easily implement and execute such protocols.
 
