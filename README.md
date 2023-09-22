@@ -30,9 +30,23 @@ Write a report, using the [latex template](./latex) provided, that details the f
 
 ### Constraints
 
+**It is important that these constraints are satisfied in your final delivery.**
+
 - Your distributed system must contain 100+ processes
-- A static membership of nodes that are already known can be assumed.
-- The report must have a maximum of 6 pages, excluding bibliography and well-marked appendices.
+- The report must have a maximum of 10 pages, excluding bibliography.
+
+## Evaluation Criteria
+
+The project delivery includes both the code and a written report that should have the format of a short paper. The report must contain clear and readable pseudo-code for each of the implemented protocols, alongside a description of the intuition of these protocols. A correctness argument for protocol that was devised or adapted by students will be positively considered in grading the project. The written report should also provide information about all experimental work conducted by the students to evaluate their solution in practice (i.e., description of experiments, setup, parameters) as well as the results and a discussion of those results.
+
+- The project will be evaluated by the correctness of the implemented solutions, its efficiency, and the quality of the implementations (in terms of code readability).
+- The quality and clearness of the report of the project will have an impact the final grade. Students with a poorly written report run the risk of penalisation, based on the evaluation of the correctness the solutions employed.
+
+This phase of the project will be graded in a scale from 1 to 20 with the following considerations:
+
+- Groups that only implement a Reliable Broadcast algorithm (using an epidemic/Gossip model) and that experimentally evaluate those protocols with a single set of experimental parameters, will at most have a grade of $12$.
+- Groups that implement both optimisations (Anti-Entropy and HyParView) can get up to $4$ additional points.
+- Groups that in additionally conduct experimental evaluation of all implementations and optimisations using a combination of two different payload sizes for content stored and retrieved from the system and two different rates of requests issued by their test application, can get $4$ additional points.
 
 ## Submission details
 
@@ -42,7 +56,7 @@ The code and report that you submit should be pushed to this repository. You wil
 
 ### Architectural overview
 
-### Basic implementation
+#### Basic implementation
 
 In the basic implementation, there will be an application (example will be provided) that will simply generate messages, and log which messages have been delivered by the system. This protocol will communicate with the Reliable Broadcast algorithm that you will implement, which will communicate directly with the wider network via a Gossip protocol.
 
@@ -67,7 +81,7 @@ ______________________________________________________
 |_____________________________________________________|
 ```
 
-### Anti-entropy optimisation
+#### Anti-entropy optimisation
 
 Your anti-entropy module should communicate with the network before any message is broadcast, to locate a gossip neighbour which has not already received the broadcast message. This *should* reduce the number of messages in the system, without contradicting the guarantees of the reliable broadcast.
 
@@ -104,7 +118,7 @@ ______________________________________________________
 |_____________________________________________________|
 ```
 
-### HyParView optimisation
+#### HyParView optimisation
 
 We discuss how HyParView works to provide a more optimal overlay network for propagating messages, [see below](#hyparview) for more details.
 
@@ -152,8 +166,10 @@ The framework was specifically designed thinking about two complementary goals: 
 
 While this is the fourth year that Babel is being used in this course, and the current version has also been used to develop several research prototypes, the framework itself is still considered a prototype, and naturally some bugs can be found. Any problems that you encounter can be raised with the course professors.
 
-
 ### HyParView
 
 [HyParView](https://asc.di.fct.unl.pt/~jleitao/pdf/dsn07-leitao.pdf), developed in 2007, is a fault-tolerant overlay network. HyParView is based on two distinct partial views of the system that are maintained for different purposes and using different mechanisms. A small partial-view (active view) that is used to ensure communication and cooperation between nodes, that is managed using a reactive strategy, where the contents of these views are only changed in reaction to an external event, such as a node failing or joining the system (or indirect consequences of these events), these views rely on TCP as an unreliable fault detector. A second and larger view (passive view) is used for fault-tolerance, as a source of quick replacements on the active view when this view is not complete. The fact that HyParView maintains a highly stable active view (and hence the overlay denoted by these views is also stable) offers some possibility to improve the communication pattern of nodes disseminating information.
 
+### Cluster
+
+The technical specification of the cluster as well as the documentation on how to use it (including changing your group password and making reservations) is online at: \href{https://cluster.di.fct.unl.pt}{\url{https://cluster.di.fct.unl.pt}}. You should read the documentation carefully. Once you have received your credentials you should be able to use it freely.
