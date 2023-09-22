@@ -1,0 +1,263 @@
+\documentclass[10pt,a4paper]{article}
+
+%\renewcommand{\section}{\section{\bold{#1}}
+
+\newcommand{\blankpage}{
+\newpage
+\thispagestyle{empty}
+\mbox{}
+\newpage
+}
+
+\usepackage[colorlinks=false]{hyperref}
+\hypersetup{%
+  colorlinks = true,
+  linkcolor  = black
+}
+\usepackage{geometry}
+\usepackage{url}
+\usepackage{booktabs}
+
+% maths
+\usepackage{bm}
+\usepackage{xspace}
+
+% algorithms
+\usepackage{algorithm,algpseudocode}
+\newcommand{\init}{\textbf{Init}\xspace}
+\newcommand{\dokw}{\textbf{do}\xspace}
+\newcommand{\upon}{\textbf{Upon}\xspace}
+\newcommand{\interface}{\textbf{Interface}\xspace}
+\newcommand{\crash}{\textbf{Crash}\xspace}
+\newcommand{\eventname}{\textbf{EventName}\xspace}
+\newcommand{\procname}{\textbf{ProcName}\xspace}
+\newcommand{\timename}{\textbf{TimeName}\xspace}
+\newcommand{\state}{\textbf{State}\xspace}
+\newcommand{\trigger}{\textbf{Trigger}\xspace}
+\newcommand{\requests}{\textbf{Requests}\xspace}
+\newcommand{\indications}{\textbf{Indications}\xspace}
+\newcommand{\proc}{\textbf{Procedure}\xspace}
+\newcommand{\timer}{\textbf{Timer}\xspace}
+\newcommand{\call}{\textbf{Call}\xspace}
+\newcommand{\return}{\textbf{Return}\xspace}
+\newcommand{\setup}{\textbf{Setup}\xspace}
+\newcommand{\periodic}{\textbf{Periodic}\xspace}
+\newcommand{\cancel}{\textbf{Cancel}\xspace}
+\newcommand{\receive}[3]{\textbf{Receiver} (\textbf{#1}, \emph{sender}, #2, #3)}
+\newcommand{\send}[3]{\textbf{Send} (\textbf{#1}, \emph{dest}, #2, #3)}
+\algblockdefx{Interface}{EndInterface}[1]{\interface #1}{\textbf{end} \interface}
+\algblockdefx{AlgState}{EndAlgState}[1]{\state #1}{\textbf{end} \state}
+\algblockdefx{Requests}{EndRequests}{\requests\textbf{:}}{}
+\algblockdefx{Indications}{EndIndications}{\indications\textbf{:}}{}
+\algblockdefx{Upon}{EndUpon}[1]{\upon #1 \algorithmicdo}{\textbf{end} \upon}
+\algblockdefx{Trigger}{EndTrigger}[1]{\trigger #1}{\textbf{end} \trigger}
+\algrenewcommand\textproc{}
+\algrenewcommand\algorithmicprocedure{\textbf{Procedure}}
+\makeatletter
+\newlength{\trianglerightwidth}
+\settowidth{\trianglerightwidth}{$\triangleright$~}
+\algnewcommand{\LineComment}[1]{\State \texttt{//} \textit{#1}}
+\algnewcommand{\LineCommentCont}[1]{\State%
+  \parbox[t]{\dimexpr\linewidth-\ALG@thistlm}{\hangindent=\trianglerightwidth \hangafter=1 \strut$\triangleright$ \emph{#1}\strut}}
+\makeatother
+\newcommand{\farg}[1]{\ensuremath{\textbf{arg}_{#1}}\xspace}
+
+% % Fonts
+\usepackage{times}
+\usepackage[T1]{fontenc}
+
+\def\course{Lab 01 Assignment: Algoritmos e Sistemas Distribu{\'i}dos}
+\def\coursePT{Lab 01 Trabalho: Algoritmos e Sistemas Distribu{\'i}dos}
+
+\def\titulo{\course{}}
+\title{\titulo}
+
+\def\data{\today}
+\date{\data}
+
+
+
+% Set your name here
+\def\name{Alex Davidson and Nuno Preguiça}
+\def\institution{
+NOVA Laboratory for Computer Science and Informatics (NOVA LINCS)\\
+and\\
+Departamento de Inform{\'a}tica\\
+Faculdade de Ci{\^e}ncias e Tecnologia\\
+Universidade NOVA de Lisboa}
+
+\author{\name\\ \institution\\ {\small (Based on notes produced by João Leitão)}}
+
+% The following metadata will show up in the PDF properties
+\hypersetup{
+  colorlinks = true,
+  urlcolor = black,
+  pdfauthor = {\name},
+  pdfkeywords = {Pseudocode, Link Abstractions}
+  pdftitle = {\course: Lab 1 Problem},
+  pdfsubject = {\course},
+  pdfpagemode = UseNone
+}
+
+\geometry{
+  body={6.5in, 9.0in},
+  left=1.0in,
+  top=1.0in
+}
+
+% Customize page headers
+\pagestyle{myheadings}
+\markright{\course - Lab1 Problem}
+\thispagestyle{empty}
+
+% Custom section fonts
+\usepackage{sectsty}
+
+% \usepackage[english,ruled]{algorithm2e}
+\usepackage{amsmath}
+
+\sectionfont{\rmfamily\mdseries\Large\textbf}
+\subsectionfont{\rmfamily\mdseries\itshape\large}
+
+% Other possible font commands include:
+% \ttfamily for teletype,
+% \sffamily for sans serif,
+% \bfseries for bold,
+% \scshape for small caps,
+% \normalsize, \large, \Large, \LARGE sizes.
+
+% Don't indent paragraphs.
+\setlength\parindent{0em}
+
+% % Make lists without bullets and compact spacing
+% \renewenvironment{itemize}{
+%   \begin{list}{}{
+%     \setlength{\leftmargin}{1.5em}
+%     \setlength{\itemsep}{0.25em}
+%     \setlength{\parskip}{0pt}
+%     \setlength{\parsep}{0.25em}
+%   }
+% }{
+%   \end{list}
+% }
+
+\begin{document}
+
+\pagenumbering{arabic} 
+
+\maketitle
+
+\section{Introduction: Broadcast problem}
+Informally, the ``Broadcast problem'' states that a process needs to transmit the same message m to N other processes (where N is every process in the system including themselves).
+
+We assume that the complete set of processes in the system is known a-priori: \(\pi\). We assume we have access to the Perfect Point-to-Point Link Abstraction. Finally, we assume an asynchronous system (no rounds, no failure detection).
+
+\subsection*{Broadcast methods}
+Consider the following two broadcast methods (Algorithm~\ref{alg:beb} and Algorithm~\ref{alg:rb}).
+
+\subsubsection*{Best-Effort Broadcast}
+\textit{Informal description}: Send the message to everyone, one at a time. When you receive one of these messages, just deliver it to the upper layer.
+
+\begin{description}
+  \item[BEB1 (Best-Effort validity):] For any two correct processes i and j, every message broadcasted by i is eventually delivered by j.
+  \item[BEB2 (No Duplication):] No message is delivered more than once.
+  \item[BEB3 (No Creation):] If a correct process j delivers a message m, then m was broadcast by some process i.  
+\end{description}
+
+\begin{algorithm}[h]
+	\label{alg:beb}
+	\caption{Best-Effort Broadcast pseudocode}
+	\begin{algorithmic}
+	\item[]
+	\Interface
+	  \LineCommentCont{Nothing to specify}
+	\EndInterface
+	
+	\item[]
+	\AlgState
+	  \State $\pi$ \Comment{set of processes in the system}
+	
+		\item[]
+	  \Upon{\textbf{Init}}
+      \LineCommentCont{Nothing to specify}
+		\EndUpon
+		\item[]
+	  \Upon{\textbf{bebBroadcast( $m$ )}}
+      \For{$p \in \pi$}
+        \State \trigger \textbf{pp2psend ( $p$, $m$ )}
+	    \EndFor
+		\EndUpon
+		\item[]
+	  \Upon{\textbf{pp2pDeliver ( $p$, $m$ )}}
+	    \State \trigger \textbf{bebDeliver ( $p$, $m$ )}
+		\EndUpon
+	\EndAlgState
+	\end{algorithmic}
+\end{algorithm}
+
+\newpage
+
+\subsection*{Reliable Broadcast}
+The Best-Effort broadcast works well until a process \emph{fails}, and thus the message is not sent to all other processes. This calls for a \emph{Reliable} broadcast, where all processes receive the necessary messages. This can be built using the Best-Effort Broadcast in Algorithm~\ref{alg:beb} as a subroutine.
+
+\begin{description}
+  \item[RB1 (Validity):] If a correct process i broadcasts message m, then i eventually delivers the message.
+  \item[RB2 (No Duplications):] No message is delivered more than once.
+  \item[RB3 (No Creation):] If a correct process j delivers a message m, then m was broadcast to j by some process i. 
+  \item[RB4 (Agreement):] If a message m is delivered by some correct process i, them m is eventually delivered by every correct process j.
+\end{description}
+
+\begin{algorithm}[h]
+	\label{alg:rb}
+	\caption{Reliable Broadcast pseudocode}
+	\begin{algorithmic}
+	\item[]
+	\Interface
+	  \LineCommentCont{Nothing to specify}
+	\EndInterface
+	
+	\item[]
+	\AlgState
+	  \State delivered \Comment{set of message IDs already delivered}
+	
+		\item[]
+	  \Upon{\textbf{Init}}
+      \State delivered $\leftarrow \emptyset$
+		\EndUpon
+		\item[]
+	  \Upon{\textbf{rbBroadcast( $m$ )}}
+      \State \trigger \textbf{rbDeliver($m$)}
+      \State \(mid \leftarrow \textbf{generateUniqueID}(m)\)
+      \State delivered \(\leftarrow\) delivered \(\cup\) \(mid\);
+      \State \trigger \(\textbf{bebBroadcast}( mid, m  )\);
+		\EndUpon
+		\item[]
+	  \Upon{\textbf{bebDeliver ( $p$, $(mid, m)$ )}}
+      \If{\(mid \notin\) delivered}
+        \State delivered \(\leftarrow\) delivered \(\cup\) \(mid\);
+        \State \trigger \(\textbf{rbDeliver}(m)\)
+        \State \trigger \(\textbf{bebBroadcast}(mid, m)\)
+      \EndIf
+		\EndUpon
+	\EndAlgState
+  \item[]
+  \Procedure{\textbf{generateUniqueID}}{m}
+		\LineCommentCont{Generates a unique ID for the input message \(m\).}
+	\EndProcedure
+	\end{algorithmic}
+\end{algorithm} 
+
+\newpage
+
+\section{Challenge}
+The Reliable Broadcast shown in Algorithm~\ref{alg:rb} consumes a lot of messages, since each process attempts to deliver all messages that it receives to every other process in the system. Asymptotically, this requires sending \(O(|\pi|^2)\) messages, which can introduce a lot of load to the network, and the processes themselves.
+
+\subsubsection*{Exercise}
+Write the pseudocode for solving the Reliable Broadcast Problem assuming the following.
+\begin{itemize}
+  \item A Fail stop model and a synchronous system.
+  \item Your solution \textbf{must} ensure all properties of the Reliable Broadcast Problem.
+  \item Your solution should ensure that in fault-free executions (i.e., when no process crashes) each process collaborates in the dissemination by sending only a \textbf{single} message.
+\end{itemize}
+
+\end{document}
