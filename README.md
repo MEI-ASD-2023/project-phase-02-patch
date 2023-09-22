@@ -1,8 +1,32 @@
-# Project Phase 1
+# Project Phase 1 <!-- omit in toc -->
+
+## Project generation link <!-- omit in toc -->
+
+Use the following link to generate this project repository for your group
+
+**https://classroom.github.com/a/PilMrn14**
+
+## Table of contents <!-- omit in toc -->
+
+- [Organisational details](#organisational-details)
+- [Overall goals](#overall-goals)
+  - [Implementation](#implementation)
+  - [Report](#report)
+  - [Constraints](#constraints)
+- [Evaluation Criteria](#evaluation-criteria)
+- [Submission details](#submission-details)
+- [Additional context](#additional-context)
+  - [Architectural overview](#architectural-overview)
+    - [Basic implementation](#basic-implementation)
+    - [Anti-entropy optimisation](#anti-entropy-optimisation)
+    - [HyParView optimisation](#hyparview-optimisation)
+  - [Programming environment (Babel)](#programming-environment-babel)
+  - [HyParView](#hyparview)
+  - [Cluster](#cluster)
 
 ## Organisational details
 
-- Groups of **three**
+- Groups of **three**. These groups should be created in GitHub when accessing the link above.
 - **Deadline: 23:59:59 2023-10-18 (Quarta-feira)**
 - Cluster access will be provided in due course for trialling your system: **you must pre-register your groups by sending an e-mail to the course professors ([nmp@fct.unl.pt](mailto:nmp@fct.unl.pt) and [a.davidson@fct.unl.pt](mailto:a.davidson@fct.unl.pt)) with the subject "*ASD 23/24 GROUP REGISTRATION*"**.
   - You will get a reply from the professor (eventually) providing your usernames and passwords to access the cluster.
