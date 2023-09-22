@@ -37,7 +37,7 @@ Use the following link to generate this project repository for your group
 
 ### Implementation
 
-The base source code for your project should be developed in the `src/asd-project1-base` folder provided [here](in the base [source code](./src/asd-project1-base/) folder.).
+The base source code for your project should be developed in the `src/asd-project1-base` folder provided in the base [source code](./src/asd-project1-base/) folder.
 
 1. Develop a distributed system (in Java, using [Babel](https://github.com/pfouto/babel-core), source code [provided](./src)) that implements a *reliable* broadcast algorithm (Lecture 1 and Lecture 2) using a gossip/epidemic protocol (Lecture 2) for deciding which peers to communicate with.
 2. Add the *"anti-entropy"* optimisation (Lecture 2), to reduce the number of redundant messages that are sent throughout the system.
