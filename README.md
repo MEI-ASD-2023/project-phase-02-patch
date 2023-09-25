@@ -4,7 +4,7 @@
 
 Use the following link to generate this project repository for your group
 
-**https://classroom.github.com/a/PilMrn14**
+**<https://classroom.github.com/a/QSCr0f1Y>**
 
 ## Table of contents <!-- omit in toc -->
 
