@@ -61,7 +61,7 @@ Write a report, using the [latex template](./latex) provided, that details the f
 **It is important that these constraints are satisfied in your final delivery.**
 
 - Your distributed system must contain 100+ processes
-- The report must have a maximum of 10 pages, excluding bibliography.
+- The report must have a maximum of 8 pages, including figures and tables, but excluding bibliography.
 
 ## Evaluation Criteria
 
@@ -73,7 +73,7 @@ The project delivery includes both the code and a written report that should hav
 This phase of the project will be graded in a scale from 1 to 20 with the following considerations:
 
 - Groups that only implement a Reliable Broadcast algorithm (using an epidemic/Gossip model) and that experimentally evaluate those protocols with a single set of experimental parameters, will at most have a grade of $12$.
-- Groups that implement both optimisations (Anti-Entropy and HyParView) can get up to $4$ additional points.
+- Groups that implement both optimisations (Anti-Entropy and HyParView) and experimentally evaluate them can get up to $4$ additional points.
 - Groups that in additionally conduct experimental evaluation of all implementations and optimisations using a combination of two different payload sizes for content stored and retrieved from the system and two different rates of requests issued by their test application, can get $4$ additional points.
 
 ## Submission details
@@ -86,7 +86,9 @@ The code and report that you submit should be pushed to this repository. You wil
 
 #### Basic implementation
 
-In the basic implementation, there will be an application (example will be provided) that will simply generate messages, and log which messages have been delivered by the system. This protocol will communicate with the Reliable Broadcast algorithm that you will implement, which will communicate directly with the wider network via a Gossip protocol.
+In the basic implementation, there will be an application (see the base code in the [src](./src/asd-project1-base/)) that will simply generate messages, and log which messages have been delivered by the system. This protocol will communicate with the Reliable Broadcast algorithm that you will implement, which will communicate directly with the wider network via a Gossip protocol.
+
+The base code floods the entire system with messages, which is inefficient. You will first have to modify it to select a subset (`t`) of other processes to interact with.
 
 ```
 ______________________________________________________
