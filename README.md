@@ -74,7 +74,7 @@ This phase of the project will be graded in a scale from 1 to 20 with the follow
 
 - Groups that only implement a Reliable Broadcast algorithm (using an epidemic/Gossip model) and that experimentally evaluate those protocols with a single set of experimental parameters, will at most have a grade of $12$.
 - Groups that implement both optimisations (Anti-Entropy and HyParView) and experimentally evaluate them can get up to $4$ additional points.
-- Groups that in additionally conduct experimental evaluation of all implementations and optimisations using a combination of two different payload sizes for content stored and retrieved from the system and two different rates of requests issued by their test application, can get $4$ additional points.
+- Groups that consider *dynamic peer memberships*, and additionally conduct experimental evaluation of all implementations and optimisations using a combination of two different payload sizes for content stored and retrieved from the system and two different rates of requests issued by their test application, can get $4$ additional points.
 
 ## Submission details
 
