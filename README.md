@@ -42,14 +42,14 @@ The project focuses on the study and implementation of a distributed system for 
 3. Develop a distributed system (in Java, using [Babel](https://github.com/pfouto/babel-core), source code [provided](./src)) that implements a distributed Hash Map interface, that is compatible with both SMR protocols.
 4. Conduct experimental analysis using 3 nodes, and using [YCSB-based](https://github.com/brianfrankcooper/YCSB) clients to compare the system using both SMR protocols, comparing throughput and latency, as observed by clients.
 
-The base source code for your project should be developed in the `src/asd-project2-base` folder provided in the base [source code](./src/asd-project2-base/) folder.
+The solution for your project should be developed in the `src/asd-project2-base` folder provided.
 
 ### Report
 
 Write a report, using the [latex template](./latex) provided, that details the following information.
 
 1. The design and implementation of your system
-2. A performance analysis of your system, comparing both SMR approaches.
+2. A performance analysis of your system, comparing your system using both agreement protocols.
 
 The report must have a maximum of 8 pages, including figures and tables, but excluding bibliography.
 
