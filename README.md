@@ -17,16 +17,13 @@ Use the following link to generate this project repository for your group
   - [Agreement Protocol](#agreement-protocol)
   - [Application](#application)
   - [Clients (YCSB)](#clients-ycsb)
-- [Evaluation Criteria](#evaluation-criteria)
-- [Submission details](#submission-details)
-- [Additional context](#additional-context)
-  - [Architectural overview](#architectural-overview-1)
-    - [Basic implementation](#basic-implementation)
-    - [Anti-entropy optimisation](#anti-entropy-optimisation)
-    - [HyParView optimisation](#hyparview-optimisation)
-  - [Programming environment (Babel)](#programming-environment-babel)
-  - [HyParView](#hyparview)
-  - [Cluster](#cluster)
+- [Experimental Analysis](#experimental-analysis)
+- [Evaluation criteria](#evaluation-criteria)
+- [Project submission](#project-submission)
+- [Commands](#commands)
+  - [Compile](#compile)
+  - [Run replicas](#run-replicas)
+  - [Run YCSB clients](#run-ycsb-clients)
 
 ## Organisational details
 
@@ -76,7 +73,7 @@ Your implementation of this protocol should be, as much as possible, independent
 
 ### Agreement Protocol
 
-You will implement the two different variants of agreement protocol in this project: Paxos and Multi-Paxos. In your implementation avoid optimisations such as running multiple instances at the same time (as this requires a significant engineering effort to implement correctly).
+You will implement the two different variants of agreement protocol in this project: Paxos and Multi-Paxos. In your implementation avoid optimisations, such as running multiple instances at the same time (as this requires a significant engineering effort to implement correctly).
 
 Paxos does not have a leader, and every process will propose commands to be decided across the different instances. You can decide what to do when a Paxos protocol receives a message for an instance that it has not yet started (i.e., where it has not received a proposal): you can reply following the protocol specification, or you can store the message locally and wait for the local state machine protocol to propose a value for that instance, and only after that process the message. Notice that you need to be aware of membership changes to be able to compute how many processes are a majority. The best suggestion for implementing Paxos, since you will need multiple instances, is to store the state of the Paxos algorithm within a Java class, and store multiple instances of this class in a map, where the key is the instance number. As such when you receive a message for a particular instance, you can fetch the current state of that instance in your map, and process the message by only modifying the state of Paxos for that instance. All Paxos messages have to be tagged with the instance for which they refer (instances can be a monotonic integer).
 
@@ -86,154 +83,54 @@ Notice that in both protocols, a process should not participate in instances tha
 
 ### Application
 
-The application layer is going to be provided to you. It will have the code necessary to support all interactions to clients and it will use the prescribed interface to interact with the state machine replication layer.
+The application layer is provided to you already. It will have the code necessary to support all interactions to clients, and it will use the prescribed interface to interact with the state machine replication layer.
 
-The application can also expose its internal state (in a serialized form) and install a copy of state gathered from another replica. This is relevant to allow a new replica of the application to be added to the system while the system is operating.
+The application can also expose its internal state (in a serialized form) and install a copy of state gathered from another replica. This is relevant to allow a new replica of the application to be added to the system, while the system is operating.
 
 ### Clients (YCSB)
 
-To inject load in the system (i.e., execute operations) we are going to use the popular YCSB system. We will provide a driver that allows for YCSB to interact with the replicated application described above. Note that YCSB might send operations to any of the active replicas. Also YCSB executed multiple ``client threads'' where each one emulated an individual client. This is important because in the experiments we will want to study the differences between the latency (measured in milli-seconds) and throughput (measured in operations per second) as the total number of clients in the system increases. YCSB already computes and outputs both of these metrics for you.
+To inject load in the system (i.e., execute operations) we are going to use the popular [YCSB system](https://github.com/brianfrankcooper/YCSB). We will provide a driver that allows YCSB to interact with the replicated application described above. Note that YCSB might send operations to any of the active replicas. Also, YCSB executes multiple ``client threads'', where each one emulates an individual client. This is important, because in the experiments we will want to study the differences between the latency (measured in milliseconds) and throughput (measured in operations per second) as the total number of clients in the system increases. YCSB already computes and outputs both of these metrics for you.
 
-You might need to run more than one instance of YCSB such that you can distribute the load of clients across multiple machines (a single physical machine has limits on the number of client threads it can execute concurrently without the clients becoming bottlenecked). The evaluation should saturate the servers and not the clients, as that would yield incorrect experimental results. If you rely on multiple instances of YCSB to run your experiments, you will need to (manually) combine the results outputted by each instance. To that end you should compute the average of the latency observed on each instance, and you should compute the sum of the throughput reported by each YCSB instance.
+You might need to run more than one instance of YCSB such that you can distribute the load of clients across multiple machines. A single physical machine has limits on the number of client threads it can execute concurrently, without the clients becoming bottlenecked. The evaluation should saturate the servers and not the clients, as that would yield incorrect experimental results. If you rely on multiple instances of YCSB to run your experiments, you will need to (manually) combine the results outputted by each instance. To that end, you should compute the average of the latency observed on each instance, and you should compute the sum of the throughput reported by each YCSB instance.
 
-## Evaluation Criteria
+## Experimental Analysis
 
-The project delivery includes both the code and a written report that should have the format of a short paper. The report must contain clear and readable pseudo-code for each of the implemented protocols, alongside a description of the intuition of these protocols. A correctness argument for protocol that was devised or adapted by students will be positively considered in grading the project. The written report should also provide information about all experimental work conducted by the students to evaluate their solution in practice (i.e., description of experiments, setup, parameters) as well as the results and a discussion of those results.
+You will conduct experiments to access the latency and throughput of the solutions that you have implemented. To do that you will vary the total number of clients (threads across YCSB processes) issuing operations over the system. Since in your system read operations are being treated in the same way as write operations (i.e., they are ordered in the state machine), the workload can use any distribution of write and read operations. For simplicity and uniformity, you can use 50%W 50%R.
+When executing different number of clients interacting with your replicated system (that will be composed of 3 replicas), YCSB will report both the latency of client operations and throughput (i.e., operations per second). The idea is that you plot the in a graph, where the x-axis reports the throughput of the system, and on the y-axis you report the latency. In your experiments, be careful to avoid saturating the clients, if you need to run more client threads than a single machine can handle you can run multiple YCSB instances across different machines simultaneously. If you do this, remember that the throughput from YCSB should be summed across all instances that are running, and the latency should be averaged. 
+
+In the plot you represent, for each system, the data point for each experiment, and you increase the number of clients and connect these sequentially with a line.
+
+## Evaluation criteria
+
+The project delivery includes both the code and a written report that should have the format of a short paper. The report must contain clear and readable pseudocode for each of the implemented protocols, alongside a description of the intuition of these protocols. A correctness argument for protocol that was devised or adapted by students will be positively considered in grading the project. The written report should also provide information about all experimental work conducted by the students to evaluate their solution in practice (i.e., description of experiments, setup, parameters) as well as the results and a discussion of those results.
 
 - The project will be evaluated by the correctness of the implemented solutions, its efficiency, and the quality of the implementations (in terms of code readability).
 - The quality and clearness of the report of the project will have an impact the final grade. Students with a poorly written report run the risk of penalisation, based on the evaluation of the correctness the solutions employed.
+- This phase of the project will be graded in a scale from 1 to 20.
 
-This phase of the project will be graded in a scale from 1 to 20 with the following considerations:
+## Project submission
 
-- Groups that only implement a Reliable Broadcast algorithm (using an epidemic/Gossip model) and that experimentally evaluate those protocols with a single set of experimental parameters, will at most have a grade of $12$.
-- Groups that implement both optimisations (Anti-Entropy and HyParView) and experimentally evaluate them can get up to $4$ additional points.
-- Groups that consider *dynamic peer memberships*, and additionally conduct experimental evaluation of all implementations and optimisations using a combination of two different payload sizes for content stored and retrieved from the system and two different rates of requests issued by their test application, can get $4$ additional points.
+The code and report that you submit should be pushed to this repository. You will then submit the **link to your repository** and the **commit ID** corresponding to the version of the project that you would like to have evaluated to a Google Form, which will be provided at a later date. The deadline for the project is **23:59:59 2023-11-29 (Quarta-feira)**.
 
-## Submission details
+## Commands
 
-The code and report that you submit should be pushed to this repository. You will then submit the **link to your repository** and the **commit ID** corresponding to the version of the project that you would like to have evaluated. Details for submission will be provided closer to the deadline.
+### Compile
 
-## Additional context
-
-### Architectural overview
-
-#### Basic implementation
-
-In the basic implementation, there will be an application (see the base code in the [src](./src/asd-project1-base/)) that will simply generate messages, and log which messages have been delivered by the system. This protocol will communicate with the Reliable Broadcast algorithm that you will implement, which will communicate directly with the wider network via a Gossip protocol.
-
-The base code floods the entire system with messages, which is inefficient. You will first have to modify it to select a subset (`t`) of other processes to interact with.
-
-```
-______________________________________________________
-|                                                     |
-|                                                     |
-|                     Application                     |
-|                                                     |
-|_____________________________________________________|
-          |                               ^
-          |                               |
-      broadcast(m)                     deliver(m)
-          |                               |
-          v                               |
-______________________________________________________
-|                  Reliable Broadcast                 |
-|                                                     |
-|               // Send messages to gossip neighbours |----->
-|                                                     |
-|          // Receive messages from gossip neighbours |<-----
-|_____________________________________________________|
+```bash
+mvn compile package
 ```
 
-#### Anti-entropy optimisation
+### Run replicas
 
-Your anti-entropy module should communicate with the network before any message is send to other node, to know which message the remote peer is missing.
-This *should* reduce the number of messages in the system, without contradicting the guarantees of the reliable broadcast.
+You can use the `start-processes-local.sh` script file to start multiple client processes. For example the following command starts 3 replicas on ports 34000-34002
 
-```
-______________________________________________________
-|                                                     |
-|                                                     |
-|                     Application                     |
-|                                                     |
-|_____________________________________________________|
-          |                               ^
-          |                               |
-      broadcast(m)                     deliver(m)
-          |                               |
-          v                               |
-______________________________________________________        
-|      Reliable Broadcast with Anti-entropy           |
-|                                                     |
-|    // Send messages to peer (based on anti-entropy) |----->
-|                                                     |
-|                      // Receive messages from peers |<-----
-|_____________________________________________________|
-         |                                ^
-         |                                |
-    Request_peer()                    Receive(peer)
-         |                                |
-         v                                |
-______________________________________________________
-|                 Membership algorithm                |
-|                                                     |
-|                // Communicate with network to learn |---->
-|                // a neighbour process               |
-|                                                     |<----
-|_____________________________________________________|
+```bash
+bash start-processes-local.sh 3
 ```
 
-#### HyParView optimisation
+You can also start a process manually by running the following command.
 
-We discuss [below](#hyparview) how HyParView works to provide a more optimal overlay network for propagating messages. The advantage of using HyParView is that the membership algorithm selects peers to ensure a more efficient propagation of messages.
+### Run YCSB clients
 
+```bash
 ```
-______________________________________________________
-|                                                     |
-|                                                     |
-|                     Application                     |
-|                                                     |
-|_____________________________________________________|
-          |                               ^
-          |                               |
-      broadcast(m)                     deliver(m)
-          |                               |
-          v                               |
-______________________________________________________
-|     Reliable Broadcast with Anti-Entropy            |
-|                                                     |
-|    // Send messages to peers learned from HyParView |----->
-|                                                     |
-|                      // Receive messages from peers |<-----
-|_____________________________________________________|
-         |                                ^
-         |                                |
-  Request_peers()                    Receive(peers)
-         |                                |
-         v                                |
-______________________________________________________
-|                                                     |
-|                                                     |
-|                     HyParView                       |
-|                                                     |
-|_____________________________________________________|
-```
-
-### Programming environment (Babel)
-
-The students will develop their project using the Java language (version 11 minimum). Development will be conducted using a framework developed in the context of the NOVA LINCS laboratory written by Pedro Fouto, Pedro Ákos Costa, João Leitão, known as **Babel**.
-
-The framework uses to the [Netty framework](https://netty.io) to support inter-process communication through sockets (although it was designed to hide this from the programmer). The framework will be discussed in the labs. An example application will be provided that is responsible for generating and logging messages in the system.
-
-The javadoc of the framework can be found here: <https://asc.di.fct.unl.pt/~jleitao/babel/>. A more detailed description can be found in the slides provided in the [additional docs](./docs/babel-slides.pdf). Example code for running a broadcast algorithm is provided in the base [source code](./src/asd-project1-base/) folder.
-
-The framework was specifically designed thinking about two complementary goals: $i)$ quick design and implementation of efficient distributed protocols; and $ii)$ teaching distributed algorithms in advanced courses. A significant effort was made to make it such that the code maps closely to protocols descriptions using (modern) pseudo-code. The goal is that you can focus on the key aspects of the protocols, their operation, and their correctness, and that you can easily implement and execute such protocols.
-
-While this is the fourth year that Babel is being used in this course, and the current version has also been used to develop several research prototypes, the framework itself is still considered a prototype, and naturally some bugs can be found. Any problems that you encounter can be raised with the course professors.
-
-### HyParView
-
-[HyParView](https://asc.di.fct.unl.pt/~jleitao/pdf/dsn07-leitao.pdf), developed in 2007, is a fault-tolerant overlay network. HyParView is based on two distinct partial views of the system that are maintained for different purposes and using different mechanisms. A small partial-view (active view) that is used to ensure communication and cooperation between nodes, that is managed using a reactive strategy, where the contents of these views are only changed in reaction to an external event, such as a node failing or joining the system (or indirect consequences of these events). These views rely on TCP as an unreliable fault detector. A second and larger view (passive view) is used for fault-tolerance, as a source of quick replacements on the active view when this view is not complete. The fact that HyParView maintains a highly stable active view (and hence the overlay denoted by these views is also stable) offers some possibility to improve the communication pattern of nodes disseminating information.
-
-### Cluster
-
-The technical specification of the cluster as well as the documentation on how to use it (including changing your group password and making reservations) is online at: <https://cluster.di.fct.unl.pt>. You should read the documentation carefully. Once you have received your credentials you should be able to use it freely.
