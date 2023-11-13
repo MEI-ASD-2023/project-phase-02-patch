@@ -28,7 +28,7 @@ Use the following link to generate this project repository for your group
 
 ## Applying patched code
 
-**To apply the patch from 13/11/2023, read the <./PATCH.md> file.**
+**To apply the patch from 13/11/2023, read the [PATCH.md](./PATCH.md) file.**
 
 ## Organisational details
 
