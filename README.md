@@ -8,6 +8,7 @@ Use the following link to generate this project repository for your group
 
 ## Table of contents <!-- omit in toc -->
 
+- [Applying patched code](#applying-patched-code)
 - [Organisational details](#organisational-details)
 - [Overall goals](#overall-goals)
   - [Implementation](#implementation)
@@ -24,6 +25,10 @@ Use the following link to generate this project repository for your group
   - [Compile](#compile)
   - [Run replicas](#run-replicas)
   - [Run YCSB clients](#run-ycsb-clients)
+
+## Applying patched code
+
+**To apply the patch from 13/11/2023, read the <./PATCH.md> file.**
 
 ## Organisational details
 
